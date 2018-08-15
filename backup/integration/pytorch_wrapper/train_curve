@@ -1,0 +1,35 @@
+#!/bin/bash
+# run baseline - 4 split
+
+n_samples=$2
+
+echo 'n_samples = '$n_samples
+input_model=$3
+echo 'input_model is'$input_model
+idx=1
+while [	$idx -le $n_samples ]
+do
+	fac=$(echo "scale=4; $idx/$n_samples" | bc)
+	#ans=$(echo "scale=4; 7339 * $fac" | bc )
+	#echo $fac";"$idx";"$ans
+	if [ "$1" == "default_baseline" ];then
+                echo "default_baseline"$idx
+		prodigy textcat_al.batch_train baseline_dataset_2000 $input_model --output '/liveperson/data/alloy/prodigy/data/pytorch_test/default_vector_baseline'$idx --n-iter 20 --factor $fac --eval-id new_eval_dataset -F /liveperson/data/alloy/prodigy/code/textcat_al.py
+		#echo "baseline"$idx
+		#prodigy textcat_al.batch_train baseline /home/ysun/pytorchprodigy --output '/liveperson/data/alloy/prodigy/data/pytorch_test/baseline'$idx --n-iter 20 --factor $fac --shuffle --eval-id eval_dataset -F /liveperson/data/alloy/prodigy/code/textcat_al.py
+	elif [ "$1" == "default_experiment" ];then
+		echo "default_experiment"$idx
+		prodigy textcat_al.batch_train default_vector_experiment $input_model --output '/liveperson/data/alloy/prodigy/data/pytorch_test/default_vector_experiment'$idx --n-iter 20 --factor $fac --eval-id new_eval_dataset -F /liveperson/data/alloy/prodigy/code/textcat_al.py
+        elif [ "$1" == "custom_baseline" ];then
+                echo "custom_baseline"$idx
+		prodigy textcat_al.batch_train baseline_dataset_2000 $input_model --output '/liveperson/data/alloy/prodigy/data/pytorch_test/custom_vector_baseline'$idx --n-iter 20 --factor $fac --eval-id new_eval_dataset -F /liveperson/data/alloy/prodigy/code/textcat_al.py
+	else # run experiment
+		echo "experiment"$idx
+		prodigy textcat_al.batch_train train_crop /home/ysun/pytorchprodigy --output '/liveperson/data/alloy/prodigy/data/pytorch_test/train'$idx --n-iter 20 --factor $fac --eval-id eval_dataset -F /liveperson/data/alloy/prodigy/code/textcat_al.py
+	fi
+	((idx=idx+1))
+done
+	#fac1=$(echo "scale=4; 0.3407" | bc)
+	#fac2=$(echo "scale=4; 0.6813" | bc)
+	#idx=1
+	#for fac in  {$fac1,$fac2,1}
