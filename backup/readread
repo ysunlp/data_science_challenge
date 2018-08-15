@@ -1,0 +1,31 @@
+Content
+quickstart
+Record quickstart document of prodigy and multiuser principles.
+
+experiment
+Record all experiments about active learning, includes:
+
+ProdigyWay_SentimentAnalysis.ipynb
+Customize_FastText_NewsGroup.ipynb
+Customize_NONNeuralNetwork_NewsGroup.ipynb
+Customize_FastText_SentimentAnalysis.ipynb
+Customize_NON_NeuralNetwork_SentimentAnalysis.ipynb
+integration
+Record codes for integration for customized model to prodigy.
+
+pytorch_wrapper: use the pytorch_wrapper from thinc, by which we could not totally control the Prodigy. Need to access the pytorch_wrapper in prodigy code base to make whole process work.
+prodigy_wrapper: customize the prodigy class and fit for all models.
+auto annotation:
+python auto_annotation.py --file-path /liveperson/data/alloy/prodigy/data/newsgroup_train_balance.jsonl --dataset newgroup_log1 --track_dataset track_no_pretrain_balance
+
+manual annotation:
+prodigy textcat-teach output_dataset fasttext /liveperson/data/alloy/prodigy/data/newsgroup_train.jsonl --label POSITIVE -vec_file /liveperson/data/alloy/prodigy/data/newsgroup_all.jsonl -init_file /liveperson/data/alloy/prodigy/data/newsgroup_example.jsonl -track track_no_pretrain_balance -F /home/ysun/repos/lp_prodigy/integration/prodigy_wrapper/textcat_recipe.py
+
+multiuser
+Record codes for multiuser application of prodigy
+
+mongo_load.py: load source data from file to MongoDB database
+python mongo_load.py -i /liveperson/data/alloy/prodigy/data/grillbot_textcat_data3.jsonl -c multiuser
+
+multiuser_annotation.py: generate multiple ports for multiple user
+python multiuser_annotation.py
